@@ -5,9 +5,11 @@ import os
 
 
 app = Flask(__name__)
+with open("apikey.txt", "r") as f:
+    apikey = f.read()
 CURRENCY = os.environ.get('CURRENCY', "BTC")
 MARKET = os.environ.get('MARKET', 'EUR')
-APIKEY = os.environ.get('APIKEY', '1LQJENC2TRTGR2KS')
+APIKEY = os.environ.get('APIKEY', apikey)
 
 @app.route('/')
 @app.route('/index', methods=['GET'])
