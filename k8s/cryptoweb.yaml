@@ -1,12 +1,9 @@
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cryptoweb
-data:
-  market: "EUR"
-  currency: "BTC"
 spec:
-  replicas: 2
+  replicas: 1 
   selector:
     matchLabels:
       app: cryptoweb
@@ -17,26 +14,20 @@ spec:
     spec:
       containers:
       - name: cryptoweb
-        image: ret2pop/cryptoweb
-        command: [ "/bin/sh", "-c", "env" ]
+        image: cryptoweb
+        command: [ "python", "./main.py" ]
         env:
-          - name: MARKET
-            valueFrom:
-              configMapKeyRef:
-                # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
-                name: cryptoweb-cfmap
-                # Specify the key associated with the value
-                key: market
-        env:
-        # Define the environment variable
-          - name: CURRENCY
-            valueFrom:
-              configMapKeyRef:
-                # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
-                name: cryptoweb-cfmap
-                # Specify the key associated with the value
-                key: currency
-
-        imagePullPolicy: Always
+        - name: MARKET
+          valueFrom:
+            configMapKeyRef:
+              key: market
+              name: cryptoweb-cfmap
+        - name: CURRENCY
+          valueFrom:
+            configMapKeyRef:
+              key: currency
+              name: cryptoweb-cfmap
+        imagePullPolicy: Never
         ports:
-        - containerPort: 8000
+        - containerPort: 8888
+          hostPort: 8888

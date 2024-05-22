@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: game-demo
+  name: cryptoweb-cfmap
 data:
   market: "EUR"
   currency: "BTC"
