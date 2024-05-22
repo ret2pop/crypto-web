@@ -8,17 +8,17 @@ app = Flask(__name__)
 dirname = os.path.dirname(__file__)
 filename = os.path.join(dirname, './secret/apikey.txt')
 
-with open(filename, "r") as f:
-    apikey = f.read()
 CURRENCY = os.environ.get('CURRENCY', "BTC").strip()
 MARKET = os.environ.get('MARKET', 'EUR').strip()
-APIKEY = os.environ.get('APIKEY', apikey).strip() # don't actually use the environ.get; use a k8s secret
 print(MARKET)
 print(CURRENCY)
 
 @app.route('/')
 @app.route('/index', methods=['GET'])
 def index():
+    with open(filename, "r") as f:
+        apikey = f.read()
+    APIKEY = os.environ.get('APIKEY', apikey).strip() # don't actually use the environ.get; use a k8s secret
     re = requests.get(f"https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY&symbol={CURRENCY}&market={MARKET}&apikey={APIKEY}")
 
     if 'Information' in re.json():
