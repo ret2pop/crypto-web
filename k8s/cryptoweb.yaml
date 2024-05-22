@@ -12,6 +12,10 @@ spec:
       labels:
         app: cryptoweb
     spec:
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: cryptoweb-secret
       containers:
       - name: cryptoweb
         image: cryptoweb
@@ -28,6 +32,10 @@ spec:
               key: currency
               name: cryptoweb-cfmap
         imagePullPolicy: Never
+        volumeMounts:
+          - name: secret-volume
+            readOnly: true
+            mountPath: "/usr/app/src/secret/"
         ports:
         - containerPort: 8888
           hostPort: 8888
